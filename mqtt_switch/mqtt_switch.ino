@@ -191,8 +191,8 @@ void handleSave() {
 void startAccessPoint() {
     String clientId = "MQTT-Switch-";
     clientId += String(random(0xffff), HEX);
-    DEBUG_PRINTF("Opening AP as '%s'", clientId);
-    WiFi.hostname(clientId);
+    DEBUG_PRINTF("Opening AP as '%s'\n", clientId.c_str());
+    WiFi.softAP(clientId.c_str());
     IPAddress myIP = WiFi.softAPIP();
     DEBUG_PRINTLN("AP IP address: ");
     DEBUG_PRINTLN(myIP);
@@ -203,7 +203,7 @@ void connectToWiFi() {
     DEBUG_PRINTF("Connecting to: %s\n", ssid.c_str());
     String clientId = "MQTT-Switch-";
     clientId += String(random(0xffff), HEX);
-    WiFi.hostname(clientId);
+    WiFi.hostname(clientId.c_str());
 
     WiFi.begin(ssid.c_str(), password.c_str());
 
