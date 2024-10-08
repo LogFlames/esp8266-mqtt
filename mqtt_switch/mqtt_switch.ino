@@ -8,6 +8,7 @@
 #include <PubSubClient.h>
 
 #define BUTTON_PIN D1
+#define LAMP_PIN D2
 
 #define DEBUG_SERIAL true
 
@@ -99,6 +100,8 @@ void loop() {
         if (client.connected()) {
             client.loop();
         }
+
+        digitalWrite(LAMP_PIN, output);
     }
 
     server.handleClient();
