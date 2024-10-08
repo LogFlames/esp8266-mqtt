@@ -46,6 +46,7 @@ bool output = false;
 void setup() {
     if (DEBUG_SERIAL) Serial.begin(19200);
     pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(LAMP_PIN, OUTPUT);
     pinMode(BUTTON_PIN, INPUT_PULLUP);
 
     prefs.begin("mqtt-switch");
