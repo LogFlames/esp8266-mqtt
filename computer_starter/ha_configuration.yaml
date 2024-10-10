@@ -1,0 +1,16 @@
+# Example configuration.yaml entry
+mqtt:
+  - button:
+      unique_id: computer_click
+      name: "Computer Power Button Click"
+      command_topic: "computer/user/click"
+      payload_press: "click"
+      qos: 0
+      retain: false
+  - button:
+      unique_id: computer_long_click
+      name: "Computer Power Button Long Click"
+      command_topic: "computer/user/click"
+      payload_press: "long_click"
+      qos: 0
+      retain: false

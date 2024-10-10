@@ -1,0 +1,8 @@
+# Example configuration.yaml entry
+mqtt:
+  - light:
+      name: "Lighthouse"
+      command_topic: "ha/lighthouse/command"
+      state_topic: "ha/lighthouse/state"
+      payload_on: "1"
+      payload_off: "0"
