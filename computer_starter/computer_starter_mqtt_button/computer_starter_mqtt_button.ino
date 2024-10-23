@@ -10,7 +10,7 @@
 #define BUTTON_PIN D1
 
 #define POWER_PIN_1 D2
-#define POWER_PIN_3 D3
+#define POWER_PIN_2 D5
 
 #define DEBUG_SERIAL true
 
@@ -45,8 +45,9 @@ unsigned long lastUpdate = millis();
 void setup() {
     if (DEBUG_SERIAL) Serial.begin(19200);
     pinMode(LED_BUILTIN, OUTPUT);
-    pinMode(LAMP_PIN, OUTPUT);
     pinMode(BUTTON_PIN, INPUT_PULLUP);
+    pinMode(POWER_PIN_1, OUTPUT);
+    pinMode(POWER_PIN_2, OUTPUT);
 
     prefs.begin("mqtt-switch");
 
@@ -239,14 +240,14 @@ void callback(const char[] topic, byte* payload, unsigned int len) {
 
     if (strcmp(topic, command_topic.c_str()) == 0) {
         if (c) {
-            set_power_pins_connected(true);
             DEBUG_PRINTLN("Recieved: Click");
-            delay(500);
+            set_power_pins_connected(true);
+            delay(800);
             set_power_pins_connected(false);
         } else if (lc) {
-            set_power_pins_connected(true);
             DEBUG_PRINTLN("Recieved: Long Click");
-            delay(1200);
+            set_power_pins_connected(true);
+            delay(12000);
             set_power_pins_connected(false);
         } else {
             DEBUG_PRINTLN("Recieved: Unknown");
