@@ -42,6 +42,8 @@ String mqtt_password = "";
 unsigned long statusLEDUntil = millis();
 unsigned long lastUpdate = millis();
 
+unsigned long lastClick = 0L;
+
 void setup() {
     if (DEBUG_SERIAL) Serial.begin(19200);
     pinMode(LED_BUILTIN, OUTPUT);
@@ -74,6 +76,8 @@ void setup() {
     server.begin();
     
     randomSeed(micros());
+
+    lastClick = millis() - 30000L;
 }
 
 void loop() {
@@ -230,22 +234,32 @@ void reconnectMQTT() {
     }
 }
 
-void callback(const char[] topic, byte* payload, unsigned int len) {
+void callback(const char* topic, byte* payload, unsigned int len) {
     if (len <= 0) {
         return;
     }
 
     bool c  = len >= 5 && payload[0] == 'c' && payload[1] == 'l' && payload[2] == 'i' && payload[3] == 'c' && payload[4] == 'k';
-    bool lc = len >= 9 && payload[0] == 'l' && payload[1] == 'o' && payload[2] == 'n' && payload[3] == 'g' && payload[4] == 'c' && payload[5] == 'l' && payload[6] == 'i' && payload[7] == 'c' && payload[8] == 'k';
+    bool lc = len >= 10 && payload[0] == 'l' && payload[1] == 'o' && payload[2] == 'n' && payload[3] == 'g' && payload[4] == '_' && payload[5] == 'c' && payload[6] == 'l' && payload[7] == 'i' && payload[8] == 'c' && payload[9] == 'k';
 
     if (strcmp(topic, command_topic.c_str()) == 0) {
         if (c) {
             DEBUG_PRINTLN("Recieved: Click");
+            if (millis() - lastClick < 30000L) {
+              DEBUG_PRINTLN("Less than 30 seconds since last click. Ignoring.");
+              return;
+            }
+            lastClick = millis();
             set_power_pins_connected(true);
             delay(800);
             set_power_pins_connected(false);
         } else if (lc) {
             DEBUG_PRINTLN("Recieved: Long Click");
+            if (millis() - lastClick < 30000L) {
+              DEBUG_PRINTLN("Less than 30 seconds since last click. Ignoring.");
+              return;
+            }
+            lastClick = millis();
             set_power_pins_connected(true);
             delay(12000);
             set_power_pins_connected(false);
@@ -256,6 +270,7 @@ void callback(const char[] topic, byte* payload, unsigned int len) {
 }
 
 void set_power_pins_connected(bool connected) {
+    digitalWrite(LED_BUILTIN, !connected);
     if (connected) {
         digitalWrite(POWER_PIN_1, LOW);
         digitalWrite(POWER_PIN_2, HIGH);
