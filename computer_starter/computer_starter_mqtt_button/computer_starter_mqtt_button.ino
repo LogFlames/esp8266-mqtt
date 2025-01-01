@@ -51,6 +51,8 @@ void setup() {
     pinMode(POWER_PIN_1, OUTPUT);
     pinMode(POWER_PIN_2, OUTPUT);
 
+    set_power_pins_connected(false);
+
     prefs.begin("mqtt-switch");
 
     loadSettings();
